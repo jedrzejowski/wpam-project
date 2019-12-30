@@ -1,0 +1,34 @@
+<resources>
+
+    <string name="trash_fraction_bg_title">Bio restauracyjne</string>
+    <string name="trash_fraction_bg_name">odpady kuchenne ulegające biodegradacji</string>
+    <string name="trash_fraction_bg_desc">"bio - gastronomia/targowiska", jako bioodpady z gastronomii i targowisk</string>
+
+    <string name="trash_fraction_bk_title">Bio</string>
+    <string name="trash_fraction_bk_name">odpady kuchenne ulegające biodegradacji</string>
+    <string name="trash_fraction_bk_desc">"bio", jako bioodpady - odpady kuchenne, z wyłączeniem odpadów pochodzenia zwierzęcego oraz tłuszczy, powstające w gospodarstwach domowych albo na nieruchomościach, w tym ich częściach, na których nie zamieszkują mieszkańcy, a powstają odpady komunalne</string>
+
+    <string name="trash_fraction_mt_title">Metale i tworzywa sztuczne</string>
+    <string name="trash_fraction_mt_name">zmieszane odpady opakowaniowe</string>
+    <string name="trash_fraction_mt_desc">"metale i tworzywa sztuczne", jako odpady metali, w tym odpady opakowaniowe z metali, odpady tworzyw sztucznych, w tym odpady opakowaniowe z tworzyw sztucznych, odpady opakowań wielomateriałowych</string>
+
+    <string name="trash_fraction_op_title">Papier</string>
+    <string name="trash_fraction_op_name">opakowania z papieru i tektury</string>
+    <string name="trash_fraction_op_desc">"papier", jako papier, w tym tektury, odpady opakowaniowe z papieru i odpady opakowaniowe z tektury</string>
+
+    <string name="trash_fraction_os_title">Szkło</string>
+    <string name="trash_fraction_os_name">opakowania ze szkła</string>
+    <string name="trash_fraction_os_desc">"szkło", jako odpady opakowaniowe ze szkła</string>
+
+    <string name="trash_fraction_oz_title">Zielone</string>
+    <string name="trash_fraction_oz_name">odpady ulegające biodegradacji</string>
+    <string name="trash_fraction_oz_desc">"odpady zielone", jako odpady zielone, z wyłączeniem nierozdrobnionych gałęzi drzew i konarów</string>
+
+    <string name="trash_fraction_wg_title">Odpady wielkogabarytowe</string>
+    <string name="trash_fraction_wg_name">odpady wielkogabarytowe</string>
+    <string name="trash_fraction_wg_desc">"odpady wielkogabarytowe" jako odpady wielkogabarytowe, w tym meble i materace</string>
+
+    <string name="trash_fraction_zm_title">Odpady zmieszane</string>
+    <string name="trash_fraction_zm_name">niesegregowane (zmieszane) odpady komunalne</string>
+    <string name="trash_fraction_zm_desc">"odpady zmieszane", jako odpady pozostałe po wysegregowaniu frakcji zbieranych selektywnie</string>
+</resources>
