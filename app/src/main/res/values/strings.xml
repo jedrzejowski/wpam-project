@@ -21,4 +21,13 @@
 
     <string name="about_authors">Autor</string>
     <string name="author">Adam Jędrzejowski</string>
+
+
+    <string name="dialog_edit_title">Punkt śmieciowy</string>
+    <string name="dialog_edit_fullName">Pełna nazwa</string>
+    <string name="dialog_edit_customName">Nazwa własna</string>
+    <string name="dialog_edit_id">ID</string>
+    <string name="dialog_edit_save">Zapisz</string>
+    <string name="dialog_edit_cancel">Anuluj</string>
+    <string name="dialog_edit_delete">Usuń</string>
 </resources>

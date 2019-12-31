@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/sync"
         android:icon="@android:drawable/stat_notify_sync"
         android:title="@string/menu_action_refresh"
         app:showAsAction="always" />
-    <item android:title="@string/menu_action_add" />
-    <item android:title="@string/menu_action_edit" />
-    <item android:title="@string/menu_action_delete" />
+    <item
+        android:id="@+id/add"
+        android:title="@string/menu_action_add" />
+    <item
+        android:id="@+id/edit"
+        android:title="@string/menu_action_edit" />
+    <item
+        android:id="@+id/delete"
+        android:title="@string/menu_action_delete" />
     <item
         android:id="@+id/about"
         android:title="@string/menu_action_about" />
