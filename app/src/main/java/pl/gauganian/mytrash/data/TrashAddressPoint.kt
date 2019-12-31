@@ -2,7 +2,7 @@ package pl.gauganian.mytrash.data
 
 import org.json.JSONObject
 
-class TrashAddressPoint() {
+class TrashAddressPoint {
     lateinit var id: String
         private set
     lateinit var fullName: String
@@ -10,13 +10,13 @@ class TrashAddressPoint() {
     lateinit var customName: String
         private set
 
-    constructor(id: String, fullName: String) : this() {
+    constructor(id: String, fullName: String) {
         this.id = id
         this.fullName = fullName
         this.customName = fullName
     }
 
-    constructor(id: String, fullName: String, customTitle: String) : this() {
+    constructor(id: String, fullName: String, customTitle: String) {
         this.id = id
         this.fullName = fullName
         this.customName = customTitle
@@ -24,10 +24,10 @@ class TrashAddressPoint() {
 
     constructor(json: String?) : this(if (json == null) JSONObject() else JSONObject(json))
 
-    constructor(json: JSONObject?) : this() {
+    constructor(json: JSONObject?) {
         this.id = json?.optString("id", "null") ?: "null"
         this.fullName = json?.optString("fullName", "null") ?: "null"
-        this.customName = json?.optString("customName", "null") ?: "null"
+        this.customName = json?.optString("customName", this.fullName) ?: this.fullName
     }
 
     fun toJSON(): JSONObject {

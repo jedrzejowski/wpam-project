@@ -73,4 +73,10 @@ object DataProvider {
         args["p_p_resource_id"] = "ajaxResourceURL"
         return downloadData(args, "_${magicString}_addressPointId=${addressPointId}")
     }
+
+    fun downloadAutocomplete(string: String): JSONArray {
+        val args = baseMapArg()
+        args["p_p_resource_id"] = "autocompleteResourceURL"
+        return downloadData(args, "_${magicString}_name=${string}")
+    }
 }

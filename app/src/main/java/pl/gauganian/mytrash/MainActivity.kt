@@ -4,16 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.SearchView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import pl.gauganian.mytrash.data.TrashAddressPoint
-import pl.gauganian.mytrash.ui.dialog.EditTrashAddressPointDialog
-import pl.gauganian.mytrash.ui.dialog.TrashPointDialogListener
+import pl.gauganian.mytrash.ui.dialog.*
 import pl.gauganian.mytrash.ui.main.TrashSchedulePagerAdapter
+
 
 class MainActivity : AppCompatActivity(), TrashPointDialogListener {
 
@@ -21,11 +24,14 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener {
     private lateinit var pagerAdapter: TrashSchedulePagerAdapter
     private lateinit var tabs: TabLayout
 
+    private lateinit var trashAddressPoints: MutableLiveData<ArrayList<TrashAddressPoint>>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
+        trashAddressPoints = (applicationContext as MyTrashApp).trashAddressPoints
         pagerAdapter = TrashSchedulePagerAdapter(this, supportFragmentManager)
 
         viewPager = findViewById(R.id.view_pager)
@@ -33,9 +39,13 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener {
 
         tabs = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
+        tabs.visibility = if ((trashAddressPoints.value?.size ?: 0) >= 2)
+            View.VISIBLE else View.GONE
 
-        (applicationContext as MyTrashApp).trashAddressPoints.observe(this, Observer {
+        trashAddressPoints.observe(this, Observer {
             pagerAdapter.notifyDataSetChanged()
+            tabs.visibility = if ((trashAddressPoints.value?.size ?: 0) >= 2)
+                View.VISIBLE else View.GONE
         })
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
@@ -49,33 +59,37 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+
+        val searchView = menu?.findItem(R.id.add)?.actionView as SearchView?
+        searchView?.isSubmitButtonEnabled = true
+//        searchView.setOnQueryTextListener(onQueryTextListener)
+
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.add -> {
 
-            }
-
-            R.id.edit -> {
-                val fragmentTransaction = supportFragmentManager.beginTransaction()
-                val prev = supportFragmentManager.findFragmentByTag(FRG_DIALOG_EDIT)
-                if (prev != null)
-                    fragmentTransaction.remove(prev)
-
-                fragmentTransaction.addToBackStack(null)
-                val dialogFragment = EditTrashAddressPointDialog()
-                dialogFragment.show(fragmentTransaction, FRG_DIALOG_EDIT)
-            }
-
-            R.id.about -> {
-                startActivity(Intent(this, AboutActivity::class.java))
-                return true
-            }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.add -> {
+            handleShowDialog(FRG_DIALOG_NEW, NewTrashAddressPointDialog::class.java)
+            true
         }
 
-        return false
+        R.id.edit -> {
+            handleShowDialog(FRG_DIALOG_EDIT, EditTrashAddressPointDialog::class.java)
+            true
+        }
+
+        R.id.delete -> {
+            handleShowDialog(FRG_DIALOG_DELETE, DeleteTrashAddressPointDialog::class.java)
+            true
+        }
+
+        R.id.about -> {
+            startActivity(Intent(this, AboutActivity::class.java))
+            true
+        }
+
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun getThrashAddressPointIndex(): Int {
@@ -83,14 +97,25 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener {
     }
 
     override fun getThrashAddressPoint(): TrashAddressPoint? {
-        return (applicationContext as MyTrashApp).trashAddressPoints.value?.get(getThrashAddressPointIndex())
+        return (applicationContext as MyTrashApp).trashAddressPoints.value?.get(
+            getThrashAddressPointIndex()
+        )
     }
 
-    override fun onReloadRequest() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun <T : DialogOnMainActivity> handleShowDialog(tag: String, _class: Class<T>) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        val prev = supportFragmentManager.findFragmentByTag(tag)
+        if (prev != null)
+            fragmentTransaction.remove(prev)
+
+        fragmentTransaction.addToBackStack(null)
+        val dialogFragment = _class.newInstance()
+        dialogFragment.show(fragmentTransaction, tag)
     }
 
     companion object {
         private const val FRG_DIALOG_EDIT = "editDialog"
+        private const val FRG_DIALOG_NEW = FRG_DIALOG_EDIT
+        private const val FRG_DIALOG_DELETE = "deleteDialog"
     }
 }

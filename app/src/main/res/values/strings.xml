@@ -22,6 +22,9 @@
     <string name="about_authors">Autor</string>
     <string name="author">Adam Jędrzejowski</string>
 
+    <string name="dialog_delete_title">Czy usunąć punkt śmieciowy</string>
+    <string name="dialog_delete_cancel">Anuluj</string>
+    <string name="dialog_delete_delete">Usuń</string>
 
     <string name="dialog_edit_title">Punkt śmieciowy</string>
     <string name="dialog_edit_fullName">Pełna nazwa</string>
@@ -30,4 +33,8 @@
     <string name="dialog_edit_save">Zapisz</string>
     <string name="dialog_edit_cancel">Anuluj</string>
     <string name="dialog_edit_delete">Usuń</string>
+
+    <string name="dialog_new_title">Nowy punkt śmieciowy</string>
+    <string name="dialog_new_hint">Wyszukaj punkt śmieciowy</string>
+
 </resources>

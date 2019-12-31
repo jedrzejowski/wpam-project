@@ -7,25 +7,17 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
+import pl.gauganian.mytrash.MyTrashApp
 import pl.gauganian.mytrash.R
+import pl.gauganian.mytrash.data.TrashAddressPoint
+import pl.gauganian.mytrash.helper.notifyObserver
 
 
-class EditTrashAddressPointDialog : DialogFragment() {
-
-    internal lateinit var listener: TrashPointDialogListener
+class EditTrashAddressPointDialog : DialogOnMainActivity() {
 
     private lateinit var idInputView: TextInputEditText
     private lateinit var fullNameInputView: TextInputEditText
     private lateinit var customNameInputView: TextInputEditText
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        try {
-            listener = context as TrashPointDialogListener
-        } catch (e: ClassCastException) {
-            throw ClassCastException("$context must implement NoticeDialogListener")
-        }
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -33,6 +25,14 @@ class EditTrashAddressPointDialog : DialogFragment() {
 
             val inflater = requireActivity().layoutInflater
             val rootView = inflater.inflate(R.layout.dialog_trashaddresspoint_edit, null)
+
+            idInputView = rootView.findViewById(R.id.id)
+            fullNameInputView = rootView.findViewById(R.id.fullName)
+            customNameInputView = rootView.findViewById(R.id.customName)
+
+            idInputView.setText(trashAddressPoint.id)
+            fullNameInputView.setText(trashAddressPoint.fullName)
+            customNameInputView.setText(trashAddressPoint.customName)
 
             builder.apply {
                 setView(rootView)
@@ -47,14 +47,26 @@ class EditTrashAddressPointDialog : DialogFragment() {
     }
 
     private val saveHandler = DialogInterface.OnClickListener { dialog, id ->
+        val data = (context?.applicationContext as MyTrashApp).trashAddressPoints
 
+        data.value?.set(
+            trashAddressPointIndex, TrashAddressPoint(
+                idInputView.text.toString(),
+                fullNameInputView.text.toString(),
+                customNameInputView.text.toString()
+            )
+        )
+
+        data.notifyObserver()
     }
 
     private val deleteHandler = DialogInterface.OnClickListener { dialog, id ->
-
+        val data = (context?.applicationContext as MyTrashApp).trashAddressPoints
+        data.value?.removeAt(trashAddressPointIndex)
+        data.notifyObserver()
     }
 
     private val cancelFun = DialogInterface.OnClickListener { dialog, id ->
-
+        dialog.cancel()
     }
 }
