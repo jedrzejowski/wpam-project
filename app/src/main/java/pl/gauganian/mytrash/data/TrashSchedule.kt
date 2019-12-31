@@ -35,8 +35,6 @@ class TrashSchedule(data: JSONObject) {
 
         val harmonogramy = data.getJSONArray("harmonogramy")
 
-        Log.e("MY TAG", harmonogramy.toString())
-
         for (i in 0 until harmonogramy.length()) {
             val item = harmonogramy.getJSONObject(i)
 

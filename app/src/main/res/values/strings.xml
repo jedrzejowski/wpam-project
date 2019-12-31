@@ -4,18 +4,21 @@
 
 
     <string name="trash_schedule_nodate">Brak danych</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_action_refresh">Odświerz</string>
+    <string name="menu_action_add">Dodaj</string>
+    <string name="menu_action_edit">Edytuj</string>
+    <string name="menu_action_delete">Usuń</string>
+    <string name="menu_action_about">O aplikacji</string>
+
+
+    <string name="about_description1">Aplikacja Moje Śmieci powstałą na zaliczenie projektu z przedmiotu WPAM na Politechnice warszawskiej.</string>
+    <string name="about_description2">Aplikacja jest otwarto źdródłowa i nie jest planowane dalsze jej rozwiajanie.</string>
+    <string name="github_link">https://github.com/jedrzejowski/wpam-project</string>
+
+    <string name="about_icons8">Ikona aplikacji pochodzi z Icons8</string>
+    <string name="icons8_link">https://icons8.com/</string>
+
+    <string name="about_authors">Autor</string>
+    <string name="author">Adam Jędrzejowski</string>
 </resources>
