@@ -4,27 +4,21 @@ import pl.gauganian.mytrash.R
 
 class TrashFraction(id: String, code: String, title: Int, name: Int, desc: Int, icon: Int) {
     var id: String
-        get() = id
         private set
 
     var code: String
-        get() = code
         private set
 
     var title: Int
-        get() = title
         private set
 
     var name: Int
-        get() = name
         private set
 
     var desc: Int
-        get() = desc
         private set
 
     var icon: Int
-        get() = icon
         private set
 
     init {
@@ -48,7 +42,7 @@ class TrashFraction(id: String, code: String, title: Int, name: Int, desc: Int, 
         )
 
         val BK = TrashFraction(
-            "OZ",
+            "BK",
             "20 02 01",
             R.string.trash_fraction_bk_title,
             R.string.trash_fraction_bk_name,
@@ -110,10 +104,9 @@ class TrashFraction(id: String, code: String, title: Int, name: Int, desc: Int, 
             R.drawable.ic_trash_fraction_zm
         )
 
-        private var list = arrayOf(BG, BK, MT, OP, OS, OZ, WG, ZM)
+        private val list = arrayOf(OP, ZM, MT, OS, BK, BG, WG, OZ)
 
         fun getAll(): Array<TrashFraction> {
-
             return list
         }
 

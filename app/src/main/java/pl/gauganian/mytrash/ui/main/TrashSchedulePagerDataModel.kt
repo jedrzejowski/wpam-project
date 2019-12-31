@@ -1,40 +1,27 @@
 package pl.gauganian.mytrash.ui.main
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import pl.gauganian.mytrash.data.TrashScheduleDownloader
+import pl.gauganian.mytrash.data.DataProvider
+import pl.gauganian.mytrash.data.TrashAddressPoint
+import pl.gauganian.mytrash.data.TrashSchedule
+import pl.gauganian.mytrash.helper.doAsync
 
 class TrashSchedulePagerDataModel : ViewModel() {
 
-    init {
-        Log.e("MY TAG", "WOlolo")
-    }
+    var addressPoint = MutableLiveData<TrashAddressPoint?>()
 
-    private val _index = MutableLiveData<Int>()
-    val text: LiveData<String> = Transformations.map(_index) {
-        "Hello world from section: $it"
-    }
+    var schedule = MutableLiveData<TrashSchedule?>()
 
-//    private var bgTask: TrashScheduleDownloader? = null
+    fun loadSchedule() {
+        doAsync {
+            val id = addressPoint.value?.id
+            if (id == null) return@doAsync
 
-    fun downloadSchedule() {
-        Log.d("MY TAG", "staring")
-        var bgTask = TrashScheduleDownloader()
-        bgTask.execute("")
-    }
+            val jarray = DataProvider.downloadSchedule(id)
 
-    fun needDownloadTrashSchedule(): Boolean {
-        return false
-    }
+            schedule.postValue(TrashSchedule(jarray.getJSONObject(0)))
 
-    fun isDownloadingTrashShedule(): Boolean {
-        return false
-    }
-
-    fun setIndex(index: Int) {
-        _index.value = index
+        }.execute()
     }
 }

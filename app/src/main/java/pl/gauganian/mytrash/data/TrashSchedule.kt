@@ -4,8 +4,10 @@ import org.json.JSONObject
 import java.time.LocalDate
 import kotlin.collections.ArrayList
 import android.graphics.Bitmap
+import android.net.TrafficStats
 import android.os.AsyncTask
 import android.util.Log
+import org.json.JSONArray
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -33,7 +35,9 @@ class TrashSchedule(data: JSONObject) {
 
         val harmonogramy = data.getJSONArray("harmonogramy")
 
-        for (i in 0 until harmonogramy.length() - 1) {
+        Log.e("MY TAG", harmonogramy.toString())
+
+        for (i in 0 until harmonogramy.length()) {
             val item = harmonogramy.getJSONObject(i)
 
             var date: LocalDate? = null
@@ -45,66 +49,5 @@ class TrashSchedule(data: JSONObject) {
 
             fractions.add(TrashScheduleItem(date, fraction))
         }
-    }
-}
-
-class TrashScheduleDownloader : AsyncTask<String, Void, TrashSchedule?>() {
-//    override fun onPostExecute(bitmap: Bitmap) {
-//        //Populate Ui
-//        super.onPostExecute(bitmap)
-//    }
-//
-//    override fun onPreExecute() {
-//        // Show progress dialog
-//        super.onPreExecute()
-//    }
-
-    override fun doInBackground(vararg params: String): TrashSchedule? {
-
-        Log.v("MY tag", "start")
-        try {
-
-            val str = URL("https://google.com")
-                .openConnection()
-                .let {
-                    it as HttpURLConnection
-                }.apply {
-                    //                setRequestProperty("Content-Type", "application/json; charset=utf-8")
-                    requestMethod = "GET"
-
-                    doOutput = true
-                    val outputWriter = OutputStreamWriter(outputStream)
-                    outputWriter.write("")
-                    outputWriter.flush()
-                }.let {
-                    if (it.responseCode == 200) it.inputStream else it.errorStream
-                }.let { streamToRead ->
-                    BufferedReader(InputStreamReader(streamToRead)).use {
-                        val response = StringBuffer()
-
-                        var inputLine = it.readLine()
-                        while (inputLine != null) {
-                            response.append(inputLine)
-                            inputLine = it.readLine()
-                        }
-                        it.close()
-                        response.toString()
-                    }
-                }
-
-            Log.v("MY tag", str)
-        } catch (t: Throwable) {
-            Log.w("MY TAG", "Failed to ${t.message}", t)
-        }
-
-
-        Log.v("MY tag", "end")
-
-        return null
-    }
-
-    override fun onProgressUpdate(vararg values: Void) {
-        // Show progress update
-        super.onProgressUpdate(*values)
     }
 }

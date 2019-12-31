@@ -4,11 +4,9 @@ import java.time.LocalDate
 
 class TrashScheduleItem(date: LocalDate?, fraction: TrashFraction?) {
     var date: LocalDate?
-        get() = date
         private set
 
     var fraction: TrashFraction?
-        get() = fraction
         private set
 
     init {
