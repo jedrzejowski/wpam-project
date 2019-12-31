@@ -36,5 +36,9 @@
 
     <string name="dialog_new_title">Nowy punkt śmieciowy</string>
     <string name="dialog_new_hint">Wyszukaj punkt śmieciowy</string>
+    <string name="dialog_new_cancel">Anuluj</string>
+
+
+    <string name="error_dataprovider">Błąd podczas łączenia z dostawcą usługi</string>
 
 </resources>

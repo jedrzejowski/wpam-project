@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import pl.gauganian.mytrash.R
 import pl.gauganian.mytrash.data.TrashAddressPoint
+import pl.gauganian.mytrash.helper.ErrorSink
 
 /**
  * A placeholder fragment containing a simple view.
@@ -26,6 +27,7 @@ class TrashScheduleFragment : Fragment() {
         dataModel = ViewModelProviders.of(this)
             .get(TrashSchedulePagerDataModel::class.java)
             .apply {
+                errorSink = activity as ErrorSink
                 addressPoint.value = TrashAddressPoint(arguments?.getString(ARG_ADRPOINT))
             }
 

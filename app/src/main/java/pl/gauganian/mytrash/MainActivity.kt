@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.SearchView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
@@ -14,15 +12,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import pl.gauganian.mytrash.data.TrashAddressPoint
+import pl.gauganian.mytrash.helper.ErrorSink
 import pl.gauganian.mytrash.ui.dialog.*
 import pl.gauganian.mytrash.ui.main.TrashSchedulePagerAdapter
+import java.lang.Exception
+import java.lang.IndexOutOfBoundsException
 
 
-class MainActivity : AppCompatActivity(), TrashPointDialogListener {
+class MainActivity : AppCompatActivity(), TrashPointDialogListener, ErrorSink {
 
     private lateinit var viewPager: ViewPager
     private lateinit var pagerAdapter: TrashSchedulePagerAdapter
     private lateinit var tabs: TabLayout
+
+    private var deleteMenuItem: MenuItem? = null
+    private var editMenuItem: MenuItem? = null
 
     private lateinit var trashAddressPoints: MutableLiveData<ArrayList<TrashAddressPoint>>
 
@@ -39,34 +43,26 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener {
 
         tabs = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
-        tabs.visibility = if ((trashAddressPoints.value?.size ?: 0) >= 2)
-            View.VISIBLE else View.GONE
 
         trashAddressPoints.observe(this, Observer {
             pagerAdapter.notifyDataSetChanged()
-            tabs.visibility = if ((trashAddressPoints.value?.size ?: 0) >= 2)
-                View.VISIBLE else View.GONE
+            handleUiRefresh()
         })
+    }
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
+    override fun onResume() {
+        super.onResume()
+        handleUiRefresh()
+        handleAddAtLeastOne()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-
-        val searchView = menu?.findItem(R.id.add)?.actionView as SearchView?
-        searchView?.isSubmitButtonEnabled = true
-//        searchView.setOnQueryTextListener(onQueryTextListener)
-
+        deleteMenuItem = menu?.findItem(R.id.delete)
+        editMenuItem = menu?.findItem(R.id.edit)
+        handleUiRefresh()
         return true
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.add -> {
@@ -97,9 +93,13 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener {
     }
 
     override fun getThrashAddressPoint(): TrashAddressPoint? {
-        return (applicationContext as MyTrashApp).trashAddressPoints.value?.get(
-            getThrashAddressPointIndex()
-        )
+        return try {
+            (applicationContext as MyTrashApp).trashAddressPoints.value?.get(
+                getThrashAddressPointIndex()
+            )
+        } catch (e: IndexOutOfBoundsException) {
+            null
+        }
     }
 
     private fun <T : DialogOnMainActivity> handleShowDialog(tag: String, _class: Class<T>) {
@@ -111,6 +111,35 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener {
         fragmentTransaction.addToBackStack(null)
         val dialogFragment = _class.newInstance()
         dialogFragment.show(fragmentTransaction, tag)
+    }
+
+    override fun handleWarnSink(tag: String, msg: String) {
+        Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun handleErrorSink(tag: String, msg: Int, e: Exception) {
+        handleErrorSink(tag, getString(msg), e)
+    }
+
+    override fun handleErrorSink(tag: String, msg: String, e: Exception) {
+        Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun handleUiRefresh() {
+        val trashAddressPointsSize = trashAddressPoints.value?.size ?: 0
+        // ukrycie zakładek
+        tabs.visibility = if (trashAddressPointsSize >= 2) View.VISIBLE else View.GONE
+
+        // wyłączenie opcji w menu
+        editMenuItem?.setEnabled(trashAddressPointsSize != 0)
+        deleteMenuItem?.setEnabled(trashAddressPointsSize != 0)
+    }
+
+    fun handleAddAtLeastOne(){
+        val trashAddressPointsSize = trashAddressPoints.value?.size ?: 0
+
+        if (trashAddressPointsSize == 0)
+            handleShowDialog(FRG_DIALOG_NEW, NewTrashAddressPointDialog::class.java)
     }
 
     companion object {

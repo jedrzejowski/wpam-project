@@ -3,11 +3,11 @@ package pl.gauganian.mytrash.data
 import org.json.JSONObject
 
 class TrashAddressPoint {
-    lateinit var id: String
+    var id: String
         private set
-    lateinit var fullName: String
+    var fullName: String
         private set
-    lateinit var customName: String
+    var customName: String
         private set
 
     constructor(id: String, fullName: String) {
@@ -25,7 +25,7 @@ class TrashAddressPoint {
     constructor(json: String?) : this(if (json == null) JSONObject() else JSONObject(json))
 
     constructor(json: JSONObject?) {
-        this.id = json?.optString("id", "null") ?: "null"
+        this.id = json?.optString("addressPointId", "null") ?: "null"
         this.fullName = json?.optString("fullName", "null") ?: "null"
         this.customName = json?.optString("customName", this.fullName) ?: this.fullName
     }
@@ -33,7 +33,7 @@ class TrashAddressPoint {
     fun toJSON(): JSONObject {
         val json = JSONObject()
 
-        json.put("id", id)
+        json.put("addressPointId", id)
         json.put("fullName", fullName)
         json.put("customName", customName)
 

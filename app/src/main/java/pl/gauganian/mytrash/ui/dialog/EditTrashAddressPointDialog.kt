@@ -30,9 +30,9 @@ class EditTrashAddressPointDialog : DialogOnMainActivity() {
             fullNameInputView = rootView.findViewById(R.id.fullName)
             customNameInputView = rootView.findViewById(R.id.customName)
 
-            idInputView.setText(trashAddressPoint.id)
-            fullNameInputView.setText(trashAddressPoint.fullName)
-            customNameInputView.setText(trashAddressPoint.customName)
+            idInputView.setText(trashAddressPoint?.id)
+            fullNameInputView.setText(trashAddressPoint?.fullName)
+            customNameInputView.setText(trashAddressPoint?.customName)
 
             builder.apply {
                 setView(rootView)

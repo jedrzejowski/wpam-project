@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -40,25 +41,27 @@ class NewTrashAddressPointDialog : DialogOnMainActivity() {
             searchInput.setAdapter(searchAdapter)
             searchInput.addTextChangedListener(searchAdapter)
             searchInput.onItemSelectedListener = searchAdapter
+            searchInput.onItemClickListener = searchAdapter
 
             builder.apply {
                 setView(rootView)
                 setMessage(R.string.dialog_new_title)
-                setPositiveButton(R.string.dialog_edit_save, saveHandler)
-                setNegativeButton(R.string.dialog_edit_cancel, cancelFun)
+                setNegativeButton(R.string.dialog_new_cancel, cancelFun)
             }
 
             return builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-    private val saveHandler = DialogInterface.OnClickListener { dialog, id ->
-        val data = (context?.applicationContext as MyTrashApp).trashAddressPoints
-
-        data.notifyObserver()
+    private val cancelFun = DialogInterface.OnClickListener { dialog, id ->
+        dialog.cancel()
     }
 
-    private val cancelFun = DialogInterface.OnClickListener { dialog, id ->
+    fun handleTrashAddressPointSelected(trashAddressPoint: TrashAddressPoint) {
+        val data = (context?.applicationContext as MyTrashApp).trashAddressPoints
+        Log.w("handleTrashAddressPointSelected", trashAddressPoint.toJSON().toString())
+        data.value?.add(trashAddressPoint)
+        data.notifyObserver()
         dialog.cancel()
     }
 
@@ -67,7 +70,7 @@ class NewTrashAddressPointDialog : DialogOnMainActivity() {
             context ?: throw IllegalStateException("Activity cannot be null"),
             android.R.layout.simple_dropdown_item_1line,
             android.R.id.text1
-        ), TextWatcher, AdapterView.OnItemSelectedListener {
+        ), TextWatcher, AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
         private val suggestions = MutableLiveData<ArrayList<TrashAddressPoint>>()
         private var asyncTask: doAsync? = null
@@ -128,10 +131,14 @@ class NewTrashAddressPointDialog : DialogOnMainActivity() {
             asyncTask = null
         }
 
-        override fun onNothingSelected(parent: AdapterView<*>?) { }
+        override fun onNothingSelected(parent: AdapterView<*>?) {}
 
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            handleTrashAddressPointSelected(getItem(position))
+        }
 
+        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            handleTrashAddressPointSelected(getItem(position))
         }
     }
 }

@@ -6,6 +6,7 @@ import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
+import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -37,35 +38,42 @@ object DataProvider {
         for ((key, value) in args)
             params.add("$key=$value")
 
-        return URL("$apiUrl?${params.joinToString("&")}")
-            .openConnection()
-            .let {
-                it as HttpURLConnection
-            }.apply {
-                //setRequestProperty("Content-Type", "application/json; charset=utf-8")
-                requestMethod = "POST"
+//        Log.v("DataProvider", "$apiUrl?${params.joinToString("&")}")
+//        Log.v("DataProvider", body)
 
-                doOutput = true
-                val outputWriter = OutputStreamWriter(outputStream)
-                outputWriter.write(body)
-                outputWriter.flush()
-            }.let {
-                if (it.responseCode == 200) it.inputStream else it.errorStream
-            }.let { streamToRead ->
-                BufferedReader(InputStreamReader(streamToRead)).use {
-                    val response = StringBuffer()
+        return try {
+            URL("$apiUrl?${params.joinToString("&")}")
+                .openConnection()
+                .let {
+                    it as HttpURLConnection
+                }.apply {
+                    //setRequestProperty("Content-Type", "application/json; charset=utf-8")
+                    requestMethod = "POST"
 
-                    var inputLine = it.readLine()
-                    while (inputLine != null) {
-                        response.append(inputLine)
-                        inputLine = it.readLine()
+                    doOutput = true
+                    val outputWriter = OutputStreamWriter(outputStream)
+                    outputWriter.write(body)
+                    outputWriter.flush()
+                }.let {
+                    if (it.responseCode == 200) it.inputStream else it.errorStream
+                }.let { streamToRead ->
+                    BufferedReader(InputStreamReader(streamToRead)).use {
+                        val response = StringBuffer()
+
+                        var inputLine = it.readLine()
+                        while (inputLine != null) {
+                            response.append(inputLine)
+                            inputLine = it.readLine()
+                        }
+                        it.close()
+                        response.toString()
                     }
-                    it.close()
-                    response.toString()
+                }.let { string ->
+                    JSONArray(string)
                 }
-            }.let { string ->
-                JSONArray(string)
-            }
+        } catch (e: Exception) {
+            throw DataProviderException()
+        }
     }
 
     fun downloadSchedule(addressPointId: String): JSONArray {
@@ -80,3 +88,5 @@ object DataProvider {
         return downloadData(args, "_${magicString}_name=${string}")
     }
 }
+
+class DataProviderException : Exception()
