@@ -11,7 +11,6 @@ import android.widget.TextView
 import android.widget.ImageView
 import pl.gauganian.mytrash.data.TrashScheduleItem
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 
 class TrashScheduleListAdapter(
@@ -23,11 +22,11 @@ class TrashScheduleListAdapter(
         context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     override fun getCount(): Int {
-        return schedule.fractions.size
+        return schedule.items.size
     }
 
     override fun getItem(position: Int): TrashScheduleItem {
-        return schedule.fractions[position]
+        return schedule.items[position]
     }
 
     override fun getItemId(position: Int): Long {

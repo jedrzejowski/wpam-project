@@ -1,5 +1,6 @@
 package pl.gauganian.mytrash
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import pl.gauganian.mytrash.data.TrashAddressPoint
@@ -7,11 +8,20 @@ import pl.gauganian.mytrash.helper.jsonObjectArrayDump
 import pl.gauganian.mytrash.helper.jsonObjectArrayParse
 import pl.gauganian.mytrash.service.BackgroundNotifier
 
-class AppSettings(val app: MyTrashApp) : SharedPreferences.OnSharedPreferenceChangeListener {
+class AppSettings : SharedPreferences.OnSharedPreferenceChangeListener {
+    val context: Context
 
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(app)
+    private val sharedPreferences: SharedPreferences
 
-    init {
+    constructor(context: Context) {
+        this.context = context
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    }
+
+    constructor(app: MyTrashApp) {
+        this.context = app
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         sharedPreferences.edit().apply {
             if (!sharedPreferences.contains(PREF_NAME_BACKGROUNDSYNC))
                 putBoolean(PREF_NAME_BACKGROUNDSYNC, true)
@@ -22,6 +32,7 @@ class AppSettings(val app: MyTrashApp) : SharedPreferences.OnSharedPreferenceCha
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         BackgroundNotifier.syncWithSettings(this)
     }
+
 
     var trashAddressPoints: ArrayList<TrashAddressPoint>
         get() {

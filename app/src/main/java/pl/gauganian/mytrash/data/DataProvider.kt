@@ -76,16 +76,35 @@ object DataProvider {
         }
     }
 
-    fun downloadSchedule(addressPointId: String): JSONArray {
-        val args = baseMapArg()
-        args["p_p_resource_id"] = "ajaxResourceURL"
-        return downloadData(args, "_${magicString}_addressPointId=${addressPointId}")
+    fun downloadSchedule(addressPointId: String): TrashSchedule {
+        try {
+            val args = baseMapArg()
+            args["p_p_resource_id"] = "ajaxResourceURL"
+            return TrashSchedule(
+                downloadData(
+                    args,
+                    "_${magicString}_addressPointId=${addressPointId}"
+                ).getJSONObject(0)
+            )
+        } catch (e: Exception) {
+            throw DataProviderException()
+        }
     }
 
-    fun downloadAutocomplete(string: String): JSONArray {
-        val args = baseMapArg()
-        args["p_p_resource_id"] = "autocompleteResourceURL"
-        return downloadData(args, "_${magicString}_name=${string}")
+    fun downloadAutocomplete(string: String): ArrayList<TrashAddressPoint> {
+        try {
+            val args = baseMapArg()
+            args["p_p_resource_id"] = "autocompleteResourceURL"
+            val jarray = downloadData(args, "_${magicString}_name=${string}")
+            val array = ArrayList<TrashAddressPoint>()
+
+            for (i in 0 until jarray.length())
+                array.add(TrashAddressPoint(jarray.getJSONObject(i)))
+
+            return array
+        } catch (e: Exception) {
+            throw DataProviderException()
+        }
     }
 }
 

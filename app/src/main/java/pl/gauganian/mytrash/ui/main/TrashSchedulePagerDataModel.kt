@@ -37,9 +37,7 @@ class TrashSchedulePagerDataModel : ViewModel() {
                     return@doAsync
                 }
 
-                val jarray = DataProvider.downloadSchedule(id)
-
-                schedule.postValue(TrashSchedule(jarray.getJSONObject(0)))
+                schedule.postValue(DataProvider.downloadSchedule(id))
                 state.postValue(State.Ready)
 
             } catch (e: Exception) {

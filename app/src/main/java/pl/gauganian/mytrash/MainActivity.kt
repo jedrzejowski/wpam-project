@@ -52,7 +52,8 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener, ErrorSink {
             handleUiRefresh()
         })
 
-//        BackgroundNotifier.start(this)
+        // Szybkie powiadomienie na prezentacje
+        sendBroadcast(Intent(this, BackgroundNotifier::class.java))
     }
 
     override fun onResume() {

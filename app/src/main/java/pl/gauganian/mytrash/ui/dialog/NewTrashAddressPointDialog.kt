@@ -109,13 +109,7 @@ class NewTrashAddressPointDialog : DialogOnMainActivity() {
 
             asyncTask = doAsync {
                 try {
-                    val jarray = DataProvider.downloadAutocomplete(s.toString())
-                    val array = ArrayList<TrashAddressPoint>()
-
-                    for (i in 0 until jarray.length())
-                        array.add(TrashAddressPoint(jarray.getJSONObject(i)))
-
-                    suggestions.postValue(array)
+                    suggestions.postValue(DataProvider.downloadAutocomplete(s.toString()))
 
                 } catch (e: Exception) {
                     TODO("pokazać błąd")

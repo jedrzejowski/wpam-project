@@ -10,7 +10,7 @@ class TrashSchedule(data: JSONObject) {
 
     val address: String = data.getString("adres")
     val district: String = data.getString("dzielnica")
-    var fractions: ArrayList<TrashScheduleItem> = ArrayList()
+    var items: ArrayList<TrashScheduleItem> = ArrayList()
 
 //    tu są jeszcze inne pola ale nie wiem na co
 
@@ -22,7 +22,7 @@ class TrashSchedule(data: JSONObject) {
 
     init {
 
-        fractions = jsonObjectArrayParse(
+        items = jsonObjectArrayParse(
             data.getJSONArray("harmonogramy")
         ) { item ->
             var date: LocalDate? = null

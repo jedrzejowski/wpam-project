@@ -45,4 +45,13 @@
     <string name="settings_background_sync">Powiadomienia w tle</string>
 
 
+    <string name="notification_channel1_id">channel1</string>
+    <string name="notification_channel1_name">Powiadominienia o wywozie</string>
+    <string name="notification_channel1_description">Powiadomienia o jutrzejszym wywozie śmieci</string>
+    <string name="notification_channel1_title">Jutro wywożą śmieci</string>
+    <string name="notification_channel1_line_prefix">&#8226;&#160;</string>
+    <string name="notification_channel1_line_separator">, </string>
+    <string name="notification_channel1_line_suffix">&#160;na %1$s\n</string>
+
+
 </resources>
