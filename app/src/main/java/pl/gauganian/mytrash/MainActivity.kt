@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import pl.gauganian.mytrash.data.TrashAddressPoint
 import pl.gauganian.mytrash.helper.ErrorSink
+import pl.gauganian.mytrash.service.BackgroundNotifier
 import pl.gauganian.mytrash.ui.dialog.*
 import pl.gauganian.mytrash.ui.main.TrashSchedulePagerAdapter
 import java.lang.Exception
@@ -29,6 +30,8 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener, ErrorSink {
     private var editMenuItem: MenuItem? = null
 
     private lateinit var trashAddressPoints: MutableLiveData<ArrayList<TrashAddressPoint>>
+
+    private var mListeners = ArrayList<ActionListener>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +51,8 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener, ErrorSink {
             pagerAdapter.notifyDataSetChanged()
             handleUiRefresh()
         })
+
+//        BackgroundNotifier.start(this)
     }
 
     override fun onResume() {
@@ -65,6 +70,11 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener, ErrorSink {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.sync -> {
+            mListeners.forEach { it.onUserRefreshRequest() }
+            true
+        }
+
         R.id.add -> {
             handleShowDialog(FRG_DIALOG_NEW, NewTrashAddressPointDialog::class.java)
             true
@@ -80,12 +90,26 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener, ErrorSink {
             true
         }
 
+        R.id.settings -> {
+            startActivity(Intent(this, SettingsActivity::class.java))
+            true
+        }
+
         R.id.about -> {
             startActivity(Intent(this, AboutActivity::class.java))
             true
         }
 
         else -> super.onOptionsItemSelected(item)
+    }
+
+    fun addActionListener(listener: ActionListener) {
+        mListeners.add(listener)
+    }
+
+    fun removeActionListener(listener: ActionListener) {
+        val i = mListeners.indexOf(listener)
+        if (i >= 0) mListeners.remove(listener)
     }
 
     override fun getThrashAddressPointIndex(): Int {
@@ -135,7 +159,7 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener, ErrorSink {
         deleteMenuItem?.setEnabled(trashAddressPointsSize != 0)
     }
 
-    fun handleAddAtLeastOne(){
+    private fun handleAddAtLeastOne() {
         val trashAddressPointsSize = trashAddressPoints.value?.size ?: 0
 
         if (trashAddressPointsSize == 0)
@@ -146,5 +170,9 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener, ErrorSink {
         private const val FRG_DIALOG_EDIT = "editDialog"
         private const val FRG_DIALOG_NEW = FRG_DIALOG_EDIT
         private const val FRG_DIALOG_DELETE = "deleteDialog"
+    }
+
+    interface ActionListener {
+        fun onUserRefreshRequest() {}
     }
 }

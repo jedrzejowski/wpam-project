@@ -17,6 +17,9 @@
         android:id="@+id/delete"
         android:title="@string/menu_action_delete" />
     <item
+        android:id="@+id/settings"
+        android:title="@string/menu_action_settings" />
+    <item
         android:id="@+id/about"
         android:title="@string/menu_action_about" />
 </menu>

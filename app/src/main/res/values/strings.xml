@@ -2,13 +2,13 @@
     <string name="empty"></string>
     <string name="app_name">Moje Śmieci</string>
 
-
     <string name="trash_schedule_nodate">Brak danych</string>
 
     <string name="menu_action_refresh">Odświerz</string>
     <string name="menu_action_add">Dodaj</string>
     <string name="menu_action_edit">Edytuj</string>
     <string name="menu_action_delete">Usuń</string>
+    <string name="menu_action_settings">Ustawienia</string>
     <string name="menu_action_about">O aplikacji</string>
 
 
@@ -19,8 +19,7 @@
     <string name="about_icons8">Ikona aplikacji pochodzi z Icons8</string>
     <string name="icons8_link">https://icons8.com/</string>
 
-    <string name="about_authors">Autor</string>
-    <string name="author">Adam Jędrzejowski</string>
+    <string name="about_author">Autor:\nAdam Jędrzejowski\nadam@jedrzejowski.pl</string>
 
     <string name="dialog_delete_title">Czy usunąć punkt śmieciowy</string>
     <string name="dialog_delete_cancel">Anuluj</string>
@@ -40,5 +39,10 @@
 
 
     <string name="error_dataprovider">Błąd podczas łączenia z dostawcą usługi</string>
+
+    <string name="settings_title">Ustawienia</string>
+    <string name="settings_background_title">Proces w tle</string>
+    <string name="settings_background_sync">Powiadomienia w tle</string>
+
 
 </resources>

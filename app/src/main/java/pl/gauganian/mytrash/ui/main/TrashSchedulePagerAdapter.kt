@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.lifecycle.Observer
 import androidx.viewpager.widget.PagerAdapter
 import pl.gauganian.mytrash.MyTrashApp
 import pl.gauganian.mytrash.data.TrashAddressPoint
@@ -18,7 +17,7 @@ import pl.gauganian.mytrash.data.TrashAddressPoint
 class TrashSchedulePagerAdapter(
     private val context: Context,
     fm: FragmentManager
-) : FragmentPagerAdapter(fm) {
+) : FragmentStatePagerAdapter(fm) {
 
     private val trashAddressPoints = (context.applicationContext as MyTrashApp).trashAddressPoints
 
@@ -39,13 +38,13 @@ class TrashSchedulePagerAdapter(
     // tu jest problem z odświerzaniem ilosci
     // https://stackoverflow.com/questions/10396321/remove-fragment-page-from-viewpager-in-android
 
-    override fun getItemId(position: Int): Long {
-        return try {
-            getTrashAddressPoint(position).id.toLong()
-        } catch (e: NumberFormatException) {
-            position.toLong()
-        }
-    }
+//    override fun getItemId(position: Int): Long {
+//        return try {
+//            getTrashAddressPoint(position).id.toLong()
+//        } catch (e: NumberFormatException) {
+//            position.toLong()
+//        }
+//    }
 
     override fun getItemPosition(`object`: Any): Int {
         return PagerAdapter.POSITION_NONE

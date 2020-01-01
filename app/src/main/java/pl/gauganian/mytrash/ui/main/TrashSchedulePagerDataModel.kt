@@ -11,6 +11,14 @@ import pl.gauganian.mytrash.helper.ErrorSink
 import pl.gauganian.mytrash.helper.doAsync
 
 class TrashSchedulePagerDataModel : ViewModel() {
+    enum class State {
+        Initial,
+        Loading,
+        Ready,
+        Error
+    }
+
+    var state = MutableLiveData<State>(State.Initial)
 
     var addressPoint = MutableLiveData<TrashAddressPoint?>()
     var schedule = MutableLiveData<TrashSchedule?>()
@@ -20,13 +28,23 @@ class TrashSchedulePagerDataModel : ViewModel() {
     fun loadSchedule() {
         doAsync {
             try {
+                state.postValue(State.Loading)
+
                 val id = addressPoint.value?.id
-                if (id == null) return@doAsync
+
+                if (id == null) {
+                    state.postValue(State.Error)
+                    return@doAsync
+                }
 
                 val jarray = DataProvider.downloadSchedule(id)
 
                 schedule.postValue(TrashSchedule(jarray.getJSONObject(0)))
+                state.postValue(State.Ready)
+
             } catch (e: Exception) {
+
+                state.postValue(State.Error)
                 errorSink?.handleErrorSink(
                     TrashSchedulePagerDataModel::class.java.name,
                     R.string.error_dataprovider,
