@@ -2,14 +2,10 @@ package pl.gauganian.mytrash.ui.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import com.google.android.material.textfield.TextInputEditText
 import pl.gauganian.mytrash.MyTrashApp
 import pl.gauganian.mytrash.R
-import pl.gauganian.mytrash.data.TrashAddressPoint
 import pl.gauganian.mytrash.helper.notifyObserver
 
 

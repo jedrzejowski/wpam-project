@@ -62,7 +62,7 @@ class NewTrashAddressPointDialog : DialogOnMainActivity() {
         Log.w("handleTrashAddressPointSelected", trashAddressPoint.toJSON().toString())
         data.value?.add(trashAddressPoint)
         data.notifyObserver()
-        dialog.cancel()
+        dialog?.cancel()
     }
 
     inner class ThrashAddressPointAdapter :

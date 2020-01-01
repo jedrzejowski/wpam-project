@@ -2,30 +2,48 @@ package pl.gauganian.mytrash
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
+import androidx.preference.PreferenceManager
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import pl.gauganian.mytrash.data.TrashAddressPoint
+import pl.gauganian.mytrash.helper.jsonObjectArrayDump
+import pl.gauganian.mytrash.helper.jsonObjectArrayParse
 
 class MyTrashApp : Application() {
 
-    val trashAddressPoints = MutableLiveData<ArrayList<TrashAddressPoint>>()
-
-    init {
-        trashAddressPoints.value = ArrayList<TrashAddressPoint>().apply {
-            //            add(TrashAddressPoint("51974388", "Bogatki"))
-//            add(TrashAddressPoint("52002438", "Jurajska"))
-        }
-
-        trashAddressPoints.observeForever { saveAppData() }
-
-        readAppData()
+    val sharedPreferences: SharedPreferences by lazy {
+        PreferenceManager.getDefaultSharedPreferences(this)
     }
 
-    private fun readAppData() {}
+    val trashAddressPoints: MutableLiveData<ArrayList<TrashAddressPoint>> by lazy {
+        val liveData = MutableLiveData<ArrayList<TrashAddressPoint>>()
 
-    private fun saveAppData() {}
+        if (sharedPreferences.contains(PREF_NAME_TRASHADDRESSPOINTS)) {
+            liveData.value = jsonObjectArrayParse(
+                sharedPreferences.getString(PREF_NAME_TRASHADDRESSPOINTS, "[]") ?: "[]"
+            ) { obj -> TrashAddressPoint(obj) }
+        }
+
+        Log.e("MY TAG", "init")
+
+        liveData.observeForever {
+
+            sharedPreferences.edit().apply {
+                putString(
+                    PREF_NAME_TRASHADDRESSPOINTS,
+                    jsonObjectArrayDump(liveData.value) { tap -> tap.toJSON() }.toString()
+                )
+                apply()
+            }
+        }
+
+        return@lazy liveData
+    }
 
     companion object {
+        private const val PREF_NAME_TRASHADDRESSPOINTS = "trashAddressPoints"
+
         fun get(c: Context): MyTrashApp {
             return c.applicationContext as MyTrashApp
         }
