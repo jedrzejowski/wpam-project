@@ -10,6 +10,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 
-    <dimen name="trash_fraction_icon_size">72dp</dimen>
+    <dimen name="trash_fraction_icon_size">52dp</dimen>
     <dimen name="center_indicator_size">72dp</dimen>
 </resources>

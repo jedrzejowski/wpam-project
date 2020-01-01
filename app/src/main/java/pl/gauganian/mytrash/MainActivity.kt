@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), TrashPointDialogListener, ErrorSink {
         })
 
         // Szybkie powiadomienie na prezentacje
-        sendBroadcast(Intent(this, BackgroundNotifier::class.java))
+//        sendBroadcast(Intent(this, BackgroundNotifier::class.java))
     }
 
     override fun onResume() {

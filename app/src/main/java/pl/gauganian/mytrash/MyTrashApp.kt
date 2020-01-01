@@ -21,7 +21,6 @@ class MyTrashApp : Application() {
 
     val settings: AppSettings by lazy { AppSettings(this) }
 
-
     val trashAddressPoints: MutableLiveData<ArrayList<TrashAddressPoint>> by lazy {
         val liveData = MutableLiveData<ArrayList<TrashAddressPoint>>()
 

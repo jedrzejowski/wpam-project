@@ -22,17 +22,30 @@ class TrashSchedule(data: JSONObject) {
 
     init {
 
-        items = jsonObjectArrayParse(
-            data.getJSONArray("harmonogramy")
-        ) { item ->
-            var date: LocalDate? = null
-            if (!item.isNull("data"))
-                date = LocalDate.parse(item.getString("data"))
+        items = ArrayList(
+            jsonObjectArrayParse(
+                data.getJSONArray("harmonogramy")
+            ) { item ->
+                var date: LocalDate? = null
+                if (!item.isNull("data"))
+                    date = LocalDate.parse(item.getString("data"))
 
-            val fractionId = item.getJSONObject("frakcja").getString("id_frakcja")
-            val fraction: TrashFraction? = TrashFraction.getById(fractionId)
+                val fractionId = item.getJSONObject("frakcja").getString("id_frakcja")
+                val fraction: TrashFraction? = TrashFraction.getById(fractionId)
 
-            TrashScheduleItem(date, fraction)
-        }
+                TrashScheduleItem(date, fraction)
+            }.sortedWith(Comparator { a, b ->
+                val d1 = a.date
+                val d2 = b.date
+
+                if (d1 == null) {
+                    if (d2 == null) return@Comparator 0
+                    else return@Comparator 1
+                } else {
+                    if (d2 == null) return@Comparator -1
+                    else return@Comparator d1.compareTo(d2)
+                }
+            })
+        )
     }
 }
